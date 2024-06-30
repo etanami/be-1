@@ -1,24 +1,30 @@
 import express from "express";
 import axios from "axios";
+import "dotenv/config.js"
 
 const app = express();
-const PORT = 3000 || process.env.PORT;
+
+const PORT = 3000;
+const apiKey = process.env.API_KEY;
+
+//app.set('trust proxy', true)
 
 // GET route for user query
 app.get("/api/hello", async (req, res) => {
   const visitorName = req.query.visitor_name;
   const clientIp = req.ip;
 
-  // fetch user location using ipapi
+  // fetch user location and temperature using weather api
   try {
-    const fetchData = await axios.get(`https://ipapi.co/${clientIp}/json/`);
-    const location = fetchData.data;
-    //console.log(location);
+    const fetchData = await axios.get(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${clientIp}`);
+    const location = fetchData.data.location.name;
+    const temperature = fetchData.data.current.temp_c;
+    console.log(fetchData.data);
 
     res.status(200).json({
       clientIp,
       location: location || "Unknown location",
-      greeting: `Hello, ${visitorName}!`,
+      greeting: `Hello, ${visitorName}!, the temperature is ${temperature} degrees Celcius in ${location}`,
     });
   } catch (err) {
     console.error("Error occurred:", err)
