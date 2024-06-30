@@ -33,7 +33,7 @@ app.get("/api/hello", async (req, res) => {
     console.log(fetchData.data);
 
     res.status(200).json({
-      clientIp,
+      client_ip: clientIp,
       location: location || "Unknown location",
       greeting: `Hello, ${visitorName}!, the temperature is ${temperature} degrees Celcius in ${location}`,
     });
