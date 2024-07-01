@@ -4,25 +4,20 @@ import "dotenv/config.js";
 
 const app = express();
 
+const HOST = '0.0.0.0';
 const PORT = 3000;
 const apiKey = process.env.API_KEY;
 
 app.set("trust proxy", true);
-
-app.get("/", (req, res) => {
-  res.send("Welcome!");
-});
 
 // GET route for user query
 app.get("/api/hello", async (req, res) => {
   const visitorName = req.query.visitor_name || "Guest";
   // Get precise ip address with ipapi
   let clientIp;
-  let location;
   try {
     const response = await axios.get("https://ipapi.co/json/");
     clientIp = response.data.ip;
-    location = response.data.city;
   } catch (err) {
     console.error("Error fetching public IP:", err);
     // Fallback to req.ip if API call fails
@@ -35,6 +30,7 @@ app.get("/api/hello", async (req, res) => {
       `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${clientIp}`
     );
     const temperature = Math.round(fetchData.data.current.temp_c);
+    const location = fetchData.data.location.name;
     console.log(fetchData.data);
 
     res.status(200).json({
@@ -48,6 +44,6 @@ app.get("/api/hello", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
