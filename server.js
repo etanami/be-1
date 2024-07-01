@@ -9,6 +9,10 @@ const apiKey = process.env.API_KEY;
 
 app.set('trust proxy', true);
 
+app.get("/", (req, res)=>{
+  res.send("Welcome!")
+})
+
 // GET route for user query
 app.get("/api/hello", async (req, res) => {
   const visitorName = req.query.visitor_name;
