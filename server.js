@@ -28,7 +28,7 @@ app.get("/api/hello", async (req, res) => {
     const fetchData = await axios.get(
       `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${clientIp}`
     );
-    const location = fetchData.data.location.region;
+    const location = fetchData.data.location.name;
     const temperature = fetchData.data.current.temp_c;
     console.log(fetchData.data);
 
