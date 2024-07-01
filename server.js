@@ -7,6 +7,8 @@ const app = express();
 const PORT = 3000;
 const apiKey = process.env.API_KEY;
 
+app.set('trust proxy', true);
+
 // GET route for user query
 app.get("/api/hello", async (req, res) => {
   const visitorName = req.query.visitor_name;
