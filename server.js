@@ -14,15 +14,17 @@ app.set("trust proxy", true);
 app.get("/api/hello", async (req, res) => {
   const visitorName = req.query.visitor_name || "Guest";
   // Get precise ip address with ipapi
-  let clientIp;
-  try {
-    const response = await axios.get("https://ipapi.co/json/");
-    clientIp = response.data.ip;
-  } catch (err) {
-    console.error("Error fetching public IP:", err);
-    // Fallback to req.ip if API call fails
-    clientIp = req.ip;
-  }
+  // let clientIp;
+  // try {
+  //   const response = await axios.get("https://ipapi.co/json/");
+  //   clientIp = response.data.ip;
+  // } catch (err) {
+  //   console.error("Error fetching public IP:", err);
+  //   // Fallback to req.ip if API call fails
+  //   clientIp = req.ip;
+  // }
+
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
   // Fetch temperature using weather api
   try {
